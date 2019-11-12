@@ -1,0 +1,21 @@
+jwt:
+  secret: crm-system@1234
+  prefix: crm-system
+server:
+  port: 7004
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/crm-system?useSSL=false&&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+    username: root
+    password: software026
+  jpa:
+    show-sql: true
+    open-in-view: true
+mybatis:
+  mapper-locations: classpath:mybatis/*.xml
+logging:
+  level:
+    com:
+      wesoft: debug

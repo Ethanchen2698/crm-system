@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ethan.crmsystem.mapper.EquipmentMapper">
+    
+    <sql id="EUQIPMENT-CONDITION">
+        <where>
+            rp.role_id = #{roleId}
+            <if test="equipmentForm.customerCode != '' and equipmentForm.customerCode != null">
+                and e.customer_code like concat('%',#{equipmentForm.customerCode},'%')
+            </if>
+            <if test="equipmentForm.deviceName != '' and equipmentForm.deviceName != null">
+                and e.device_name like concat('%',#{equipmentForm.deviceName},'%')
+            </if>
+            <if test="equipmentForm.price != '' and equipmentForm.price != null">
+                and e.price = #{customerForm.price}
+            </if>
+            <if test="equipmentForm.saleStaff != '' and equipmentForm.saleStaff != null">
+                and e.sales_staff like concat('%',#{equipmentForm.saleStaff},'%')
+            </if>
+            <if test="equipmentForm.insStaff != '' and equipmentForm.insStaff != null">
+                and e.installation_staff like concat('%',#{equipmentForm.insStaff},'%')
+            </if>
+            <if test="equipmentForm.startTime != null and equipmentForm.endTime != null">
+                and e.installation_time between #{equipmentForm.startTime} and #{equipmentForm.endTime}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findEquipmentByCondition" resultType="com.ethan.crmsystem.mapper.bean.EquipmentBean">
+        select e.* from
+        equipment e left join role_priviledge rp on e.region_id = rp.meta_region_id
+        <include refid="EUQIPMENT-CONDITION"/>
+        limit #{equipmentForm.offset},#{equipmentForm.pageSize}
+    </select>
+
+    <select id="findCountByCondition" resultType="string">
+        select count(1) from
+        equipment e left join role_priviledge rp on e.region_id = rp.meta_region_id
+        <include refid="EUQIPMENT-CONDITION"/>
+    </select>
+
+</mapper>
