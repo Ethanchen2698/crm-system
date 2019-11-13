@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @author<a href="ethanchen2698@163.com">ethan chen</a>
  */
 @Repository
-public interface AferSalesInfoRepository extends JpaRepository<AfterSalesInfo,Integer> {
+public interface AfterSalesInfoRepository extends JpaRepository<AfterSalesInfo,Integer> {
 }

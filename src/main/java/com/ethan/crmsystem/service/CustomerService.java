@@ -76,11 +76,9 @@ public class CustomerService {
         User user = requestContext.getRequestUser();
 
         customerForm = dealFormData(customerForm);
-        Integer  count = customerMapper.findCountByCondition(customerForm,user.getRoleId());
+        String count = customerMapper.findCountByCondition(customerForm,user.getRoleId());
 
-        Integer totalPage = count / Integer.valueOf(customerForm.getPageSize());
-
-        return totalPage.toString();
+        return count;
     }
 
     public String findCustomerByCode(String code) {

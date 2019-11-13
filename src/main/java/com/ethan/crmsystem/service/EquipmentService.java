@@ -79,6 +79,7 @@ public class EquipmentService {
         Equipment equipment = new Equipment();
         equipment.setCustomerCode(equipmentModel.getCustomerCode());
         equipment = dealEuqipment(equipment,equipmentModel);
+        equipment.setCreatTime(LocalDateTime.now());
 
         equipmentRepository.save(equipment);
 
@@ -119,7 +120,6 @@ public class EquipmentService {
         equipment.setSalesStaff(equipmentModel.getSaleStaff());
         equipment.setInstallationStaff(equipmentModel.getInsStaff());
         equipment.setUserId(user.getId());
-        equipment.setCreatTime(LocalDateTime.now());
 
         return equipment;
     }
