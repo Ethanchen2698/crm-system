@@ -13,6 +13,7 @@ import com.ethan.crmsystem.utils.LocalDateTimeHelper;
 import com.ethan.crmsystem.web.model.CustomerForm;
 import com.ethan.crmsystem.web.model.CustomerModel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -108,9 +109,8 @@ public class CustomerService {
     @Transactional(rollbackOn = Exception.class)
     public String updateCustomer(CustomerModel customerModel) {
 
-        Optional<Customer> customerOptional = customerRepository.findById(customerModel.getId());
+        Customer customer = customerRepository.findById(customerModel.getId()).get();
 
-        Customer customer = customerOptional.get();
         customer = dealCustomer(customer,customerModel);
         customer.setUpdateTime(LocalDateTime.now());
 
@@ -122,6 +122,9 @@ public class CustomerService {
     @Transactional(rollbackOn = Exception.class)
     public String deleteCustomer(String code) {
 
+        if (StringUtils.isEmpty(code)){
+            return ResponseConstants.FAILURE;
+        }
         customerRepository.deleteByCode(code);
 
         return ResponseConstants.SUCCESS;

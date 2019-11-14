@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ethan.crmsystem.mapper.ReturnVisitMapper">
+    
+    <sql id="RETURNVISIT-CONDITION">
+        <where>
+            rp.role_id = #{roleId}
+            <if test="returnVisitForm.customerCode != '' and returnVisitForm.customerCode != null">
+                and rvi.customer_code like concat('%',#{returnVisitForm.customerCode},'%')
+            </if>
+            <if test="returnVisitForm.visitStaff != '' and returnVisitForm.visitStaff != null">
+                and rvi.visit_staff like concat('%',#{returnVisitForm.visitStaff},'%')
+            </if>
+            <if test="returnVisitForm.startTime != null and returnVisitForm.endTime != null">
+                and rvi.visit_time between #{returnVisitForm.startTime} and #{returnVisitForm.endTime}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findReturnVisitLogByCondition" resultType="com.ethan.crmsystem.mapper.bean.ReturnVisitBean">
+        select rvi.* from
+        return_visit_info rvi left join role_priviledge rp on rvi.region_id = rp.meta_region_id
+        <include refid="RETURNVISIT-CONDITION"/>
+        limit #{returnVisitForm.offset},#{returnVisitForm.pageSize}
+    </select>
+
+    <select id="findCountByCondition" resultType="string">
+        select count(1) from
+        return_visit_info rvi left join role_priviledge rp on rvi.region_id = rp.meta_region_id
+        <include refid="RETURNVISIT-CONDITION"/>
+    </select>
+
+</mapper>

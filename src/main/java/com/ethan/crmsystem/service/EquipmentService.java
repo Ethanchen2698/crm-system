@@ -10,6 +10,7 @@ import com.ethan.crmsystem.repository.EquipmentRepository;
 import com.ethan.crmsystem.utils.LocalDateTimeHelper;
 import com.ethan.crmsystem.web.model.EquipmentForm;
 import com.ethan.crmsystem.web.model.EquipmentModel;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Description:
@@ -89,8 +89,7 @@ public class EquipmentService {
     @Transactional(rollbackOn = Exception.class)
     public String updateEquipment(EquipmentModel equipmentModel) {
 
-        Optional<Equipment> equipmentOptional = equipmentRepository.findById(equipmentModel.getId());
-        Equipment equipment = equipmentOptional.get();
+        Equipment equipment = equipmentRepository.findById(equipmentModel.getId()).get();
         equipment = dealEuqipment(equipment,equipmentModel);
         equipment.setUpdateTime(LocalDateTime.now());
 
@@ -102,6 +101,9 @@ public class EquipmentService {
     @Transactional(rollbackOn = Exception.class)
     public String deleteEquipment(String id) {
 
+        if (StringUtils.isEmpty(id)){
+            return ResponseConstants.FAILURE;
+        }
         equipmentRepository.deleteById(id);
 
         return ResponseConstants.SUCCESS;

@@ -11,6 +11,7 @@ import com.ethan.crmsystem.utils.LocalDateTimeHelper;
 import com.ethan.crmsystem.web.model.AfterSalesForm;
 import com.ethan.crmsystem.web.model.AfterSalesModel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +77,7 @@ public class AfterSalesService {
 
     public String addAfterSalesLog(AfterSalesModel afterSalesModel) {
 
-        AfterSalesInfo afterSalesInfo = new AfterSalesInfo();
+        AfterSalesInfo afterSalesInfo = afterSalesInfoRepository.findById(Integer.valueOf(afterSalesModel.getId())).get();
         afterSalesInfo = dealAfterSalesLog(afterSalesInfo,afterSalesModel);
         afterSalesInfo.setCreatTime(LocalDateTime.now());
 
@@ -99,6 +100,9 @@ public class AfterSalesService {
     @Transactional(rollbackOn = Exception.class)
     public String deleteAfterSalesLog(String id) {
 
+        if (StringUtils.isEmpty(id)){
+            return ResponseConstants.FAILURE;
+        }
         afterSalesInfoRepository.deleteById(Integer.valueOf(id));
 
         return ResponseConstants.SUCCESS;

@@ -2,41 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ethan.crmsystem.mapper.AfterSalesMapper">
     
-    <sql id="EUQIPMENT-CONDITION">
+    <sql id="AFTERSALES-CONDITION">
         <where>
             rp.role_id = #{roleId}
-            <if test="equipmentForm.customerCode != '' and equipmentForm.customerCode != null">
-                and e.customer_code like concat('%',#{equipmentForm.customerCode},'%')
+            <if test="afterSalesForm.customerCode != '' and afterSalesForm.customerCode != null">
+                and asi.customer_code like concat('%',#{afterSalesForm.customerCode},'%')
             </if>
-            <if test="equipmentForm.deviceName != '' and equipmentForm.deviceName != null">
-                and e.device_name like concat('%',#{equipmentForm.deviceName},'%')
+            <if test="afterSalesForm.equipmentId != '' and afterSalesForm.equipmentId != null">
+                and asi.equipment_id like concat('%',#{afterSalesForm.equipmentId},'%')
             </if>
-            <if test="equipmentForm.price != '' and equipmentForm.price != null">
-                and e.price = #{customerForm.price}
+            <if test="afterSalesForm.dealStaff != '' and afterSalesForm.dealStaff != null">
+                and asi.deal_staff like concat('%',#{afterSalesForm.dealStaff},'%')
             </if>
-            <if test="equipmentForm.saleStaff != '' and equipmentForm.saleStaff != null">
-                and e.sales_staff like concat('%',#{equipmentForm.saleStaff},'%')
-            </if>
-            <if test="equipmentForm.insStaff != '' and equipmentForm.insStaff != null">
-                and e.installation_staff like concat('%',#{equipmentForm.insStaff},'%')
-            </if>
-            <if test="equipmentForm.startTime != null and equipmentForm.endTime != null">
-                and e.installation_time between #{equipmentForm.startTime} and #{equipmentForm.endTime}
+            <if test="afterSalesForm.startTime != null and afterSalesForm.endTime != null">
+                and asi.deal_time between #{afterSalesForm.startTime} and #{afterSalesForm.endTime}
             </if>
         </where>
     </sql>
 
     <select id="findAfterSalesLogByCondition" resultType="com.ethan.crmsystem.mapper.bean.AfterSalesBean">
-        select e.* from
-        equipment e left join role_priviledge rp on e.region_id = rp.meta_region_id
-        <include refid="EUQIPMENT-CONDITION"/>
-        limit #{equipmentForm.offset},#{equipmentForm.pageSize}
+        select asi.* from
+        after_sales_info asi left join role_priviledge rp on asi.region_id = rp.meta_region_id
+        <include refid="AFTERSALES-CONDITION"/>
+        limit #{afterSalesForm.offset},#{afterSalesForm.pageSize}
     </select>
 
     <select id="findCountByCondition" resultType="string">
         select count(1) from
-        equipment e left join role_priviledge rp on e.region_id = rp.meta_region_id
-        <include refid="EUQIPMENT-CONDITION"/>
+        after_sales_info asi left join role_priviledge rp on asi.region_id = rp.meta_region_id
+        <include refid="AFTERSALES-CONDITION"/>
     </select>
 
 </mapper>
