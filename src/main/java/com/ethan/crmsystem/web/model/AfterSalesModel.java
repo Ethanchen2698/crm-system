@@ -24,4 +24,6 @@ public class AfterSalesModel {
     private String saleRecord;
 
     private String note;
+
+    private String region;
 }

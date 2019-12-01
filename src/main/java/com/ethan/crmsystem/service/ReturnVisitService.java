@@ -79,6 +79,8 @@ public class ReturnVisitService {
         ReturnVisitInfo returnVisitInfo = new ReturnVisitInfo();
         returnVisitInfo = dealReturnVisitLog(returnVisitInfo,returnVisitModel);
         returnVisitInfo.setCreatTime(LocalDateTime.now());
+        returnVisitInfo.setCustomerCode(returnVisitModel.getCustomerCode());
+        returnVisitInfo.setRegionId(returnVisitModel.getRegion());
 
         returnVisitInfoRepository.save(returnVisitInfo);
 
@@ -111,7 +113,7 @@ public class ReturnVisitService {
 
         User user = requestContext.getRequestUser();
 
-        LocalDateTime visitTime = LocalDateTime.parse(returnVisitModel.getVisitTime(),formatter);
+        LocalDateTime visitTime = LocalDateTimeHelper.parse(returnVisitModel.getVisitTime());
 
         returnVisitInfo.setVisitStaff(returnVisitModel.getVisitStaff());
         returnVisitInfo.setVisitTime(visitTime);

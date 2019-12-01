@@ -30,6 +30,8 @@ public class ReturnVisitInfo {
 
     private String note;
 
+    private String regionId;
+
     private LocalDateTime updateTime;
 
     private String userId;

@@ -24,4 +24,6 @@ public class ReturnVisitModel {
     private String visitRecord;
 
     private String note;
+
+    private String region;
 }

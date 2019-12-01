@@ -32,6 +32,8 @@ public class AfterSalesInfo {
 
     private String note;
 
+    private String regionId;
+
     private LocalDateTime updateTime;
 
     private String userId;

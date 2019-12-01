@@ -27,4 +27,6 @@ public class EquipmentModel {
 
     private String insStaff;
 
+    private String region;
+
 }

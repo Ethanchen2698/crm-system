@@ -77,9 +77,12 @@ public class AfterSalesService {
 
     public String addAfterSalesLog(AfterSalesModel afterSalesModel) {
 
-        AfterSalesInfo afterSalesInfo = afterSalesInfoRepository.findById(Integer.valueOf(afterSalesModel.getId())).get();
+        AfterSalesInfo afterSalesInfo = new AfterSalesInfo();
         afterSalesInfo = dealAfterSalesLog(afterSalesInfo,afterSalesModel);
         afterSalesInfo.setCreatTime(LocalDateTime.now());
+        afterSalesInfo.setCustomerCode(afterSalesModel.getCustomerCode());
+        afterSalesInfo.setEquipmentId(afterSalesModel.getEquipmentId());
+        afterSalesInfo.setRegionId(afterSalesModel.getRegion());
 
         afterSalesInfoRepository.save(afterSalesInfo);
 
@@ -88,7 +91,8 @@ public class AfterSalesService {
 
     public String updateAfterSalesLog(AfterSalesModel afterSalesModel) {
 
-        AfterSalesInfo afterSalesInfo = new AfterSalesInfo();
+        AfterSalesInfo afterSalesInfo = afterSalesInfoRepository.findById(Integer.valueOf(afterSalesModel.getId())).get();
+
         afterSalesInfo = dealAfterSalesLog(afterSalesInfo,afterSalesModel);
         afterSalesInfo.setUpdateTime(LocalDateTime.now());
 
@@ -112,7 +116,7 @@ public class AfterSalesService {
 
         User user = requestContext.getRequestUser();
 
-        LocalDateTime dealTime = LocalDateTime.parse(afterSalesModel.getDealTime(),formatter);
+        LocalDateTime dealTime = LocalDateTimeHelper.parse(afterSalesModel.getDealTime());
 
         afterSalesInfo.setDealStaff(afterSalesModel.getDealStaff());
         afterSalesInfo.setDealTime(dealTime);

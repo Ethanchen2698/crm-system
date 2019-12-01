@@ -57,6 +57,7 @@ public class EquipmentService {
             equipmentModel.setInsTime(insTime);
             equipmentModel.setPrice(equipmentBean.getPrice());
             equipmentModel.setSaleStaff(equipmentBean.getSales_staff());
+            equipmentModel.setRegion(equipmentBean.getRegion_id());
 
             equipmentModels.add(equipmentModel);
         });
@@ -80,6 +81,8 @@ public class EquipmentService {
         equipment.setCustomerCode(equipmentModel.getCustomerCode());
         equipment = dealEuqipment(equipment,equipmentModel);
         equipment.setCreatTime(LocalDateTime.now());
+        equipment.setCustomerCode(equipment.getCustomerCode());
+        equipment.setRegionId(equipmentModel.getRegion());
 
         equipmentRepository.save(equipment);
 
@@ -113,7 +116,7 @@ public class EquipmentService {
 
         User user = requestContext.getRequestUser();
 
-        LocalDateTime insTime = LocalDateTime.parse(equipmentModel.getInsTime(),formatter);
+        LocalDateTime insTime = LocalDateTimeHelper.parse(equipmentModel.getInsTime());
 
         equipment.setDeviceName(equipmentModel.getDeviceName());
         equipment.setInstallationAddress(equipmentModel.getInsAddress());
