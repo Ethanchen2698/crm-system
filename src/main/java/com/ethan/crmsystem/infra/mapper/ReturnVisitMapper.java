@@ -1,6 +1,7 @@
-package com.ethan.crmsystem.mapper;
+package com.ethan.crmsystem.infra.mapper;
 
-import com.ethan.crmsystem.mapper.bean.ReturnVisitBean;
+import com.ethan.crmsystem.infra.domain.Customer;
+import com.ethan.crmsystem.infra.domain.ReturnVisitInfo;
 import com.ethan.crmsystem.web.model.ReturnVisitForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,9 +17,13 @@ import java.util.List;
 @Mapper
 public interface ReturnVisitMapper {
 
-    List<ReturnVisitBean> findReturnVisitLogByCondition(@Param("returnVisitForm")ReturnVisitForm returnVisitForm,
+    List<ReturnVisitInfo> findReturnVisitLogByCondition(@Param("returnVisitForm")ReturnVisitForm returnVisitForm,
                                                         @Param("roleId") Integer roelId);
 
     String findCountByCondition(@Param("returnVisitForm") ReturnVisitForm returnVisitForm,
                                 @Param("roleId") Integer roelId);
+
+    List<ReturnVisitInfo> findReturnVisitByCustomerCode(@Param("customerCode") String customerCode, @Param("roleId") Integer roleId);
+
+    String findReturnVisitCountByCode(@Param("customerCode") String customerCode, @Param("roleId") Integer roleId);
 }

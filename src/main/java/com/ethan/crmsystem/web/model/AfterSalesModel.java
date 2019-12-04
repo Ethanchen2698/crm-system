@@ -26,4 +26,10 @@ public class AfterSalesModel {
     private String note;
 
     private String region;
+
+    private String creatTime;
+
+    private String updateTime;
+
+    private String userName;
 }

@@ -1,7 +1,8 @@
-package com.ethan.crmsystem.mapper.bean;
+package com.ethan.crmsystem.infra.domain;
 
 import lombok.Data;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -11,8 +12,12 @@ import java.time.LocalDateTime;
  * @author<a href="ethanchen2698@163.com">ethan chen</a>
  */
 @Data
-public class CustomerBean {
+@Table
+@Entity
+public class Customer {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String code;
@@ -23,11 +28,11 @@ public class CustomerBean {
 
     private String address;
 
-    private String region_id;
+    private String regionId;
 
-    private LocalDateTime update_time;
+    private LocalDateTime updateTime;
 
-    private String user_id;
+    private String userId;
 
-    private LocalDateTime creat_time;
+    private LocalDateTime creatTime;
 }

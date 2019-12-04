@@ -1,10 +1,9 @@
-package com.ethan.crmsystem.domain;
+package com.ethan.crmsystem.infra.domain;
 
 import com.ethan.crmsystem.common.UUIDGenerator;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

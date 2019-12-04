@@ -1,7 +1,7 @@
 package com.ethan.crmsystem.service;
 
-import com.ethan.crmsystem.domain.*;
-import com.ethan.crmsystem.repository.*;
+import com.ethan.crmsystem.infra.domain.*;
+import com.ethan.crmsystem.infra.repository.*;
 import com.ethan.crmsystem.web.model.SelectGroupOption;
 import com.ethan.crmsystem.web.model.SelectOption;
 import org.springframework.beans.factory.annotation.Autowired;

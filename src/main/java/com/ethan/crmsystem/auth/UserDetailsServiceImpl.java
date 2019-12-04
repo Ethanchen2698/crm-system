@@ -1,7 +1,7 @@
 package com.ethan.crmsystem.auth;
 
-import com.ethan.crmsystem.domain.User;
-import com.ethan.crmsystem.repository.UserRepository;
+import com.ethan.crmsystem.infra.domain.User;
+import com.ethan.crmsystem.infra.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

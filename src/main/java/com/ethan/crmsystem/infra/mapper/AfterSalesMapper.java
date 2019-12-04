@@ -1,6 +1,7 @@
-package com.ethan.crmsystem.mapper;
+package com.ethan.crmsystem.infra.mapper;
 
-import com.ethan.crmsystem.mapper.bean.AfterSalesBean;
+import com.ethan.crmsystem.infra.domain.AfterSalesInfo;
+import com.ethan.crmsystem.infra.domain.Customer;
 import com.ethan.crmsystem.web.model.AfterSalesForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,9 +17,13 @@ import java.util.List;
 @Mapper
 public interface AfterSalesMapper {
 
-    List<AfterSalesBean> findAfterSalesLogByCondition(@Param("afterSalesForm") AfterSalesForm afterSalesForm,
+    List<AfterSalesInfo> findAfterSalesLogByCondition(@Param("afterSalesForm") AfterSalesForm afterSalesForm,
                                                       @Param("roleId") Integer roelId);
 
     String findCountByCondition(@Param("afterSalesForm") AfterSalesForm afterSalesForm,
                                 @Param("roleId") Integer roelId);
+
+    List<AfterSalesInfo> findAfterSaleByCustomerCode(@Param("customerCode") String customerCode, @Param("roleId") Integer roleId);
+
+    String findAfterSaleCountByEquipmentId(@Param("equipmentId")String equipmentId, @Param("roleId")Integer roleId);
 }

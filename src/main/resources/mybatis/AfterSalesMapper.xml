@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ethan.crmsystem.mapper.AfterSalesMapper">
-    
+<mapper namespace="com.ethan.crmsystem.infra.mapper.AfterSalesMapper">
+
+    <resultMap id="RM-AFTERSALESLOG" type="com.ethan.crmsystem.infra.domain.AfterSalesInfo">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="customer_code" jdbcType="VARCHAR" property="customerCode"></result>
+        <result column="equipment_id" jdbcType="CHAR" property="equipmentId"></result>
+        <result column="deal_staff" jdbcType="VARCHAR" property="dealStaff"></result>
+        <result column="deal_time" jdbcType="DATE" property="dealTime"></result>
+        <result column="sale_record" jdbcType="VARCHAR" property="saleRecord"></result>
+        <result column="note" jdbcType="VARCHAR" property="note"></result>
+        <result column="region_id" jdbcType="CHAR" property="regionId"></result>
+        <result column="update_time" jdbcType="DATE" property="updateTime"></result>
+        <result column="user_id" jdbcType="CHAR" property="userId"></result>
+        <result column="creat_time" jdbcType="DATE" property="creatTime"></result>
+    </resultMap>
+
+
     <sql id="AFTERSALES-CONDITION">
         <where>
             rp.role_id = #{roleId}
@@ -9,7 +24,7 @@
                 and asi.customer_code like concat('%',#{afterSalesForm.customerCode},'%')
             </if>
             <if test="afterSalesForm.equipmentId != '' and afterSalesForm.equipmentId != null">
-                and asi.equipment_id like concat('%',#{afterSalesForm.equipmentId},'%')
+                and asi.equipment_id = #{afterSalesForm.equipmentId}
             </if>
             <if test="afterSalesForm.dealStaff != '' and afterSalesForm.dealStaff != null">
                 and asi.deal_staff like concat('%',#{afterSalesForm.dealStaff},'%')
@@ -20,7 +35,7 @@
         </where>
     </sql>
 
-    <select id="findAfterSalesLogByCondition" resultType="com.ethan.crmsystem.mapper.bean.AfterSalesBean">
+    <select id="findAfterSalesLogByCondition" resultMap="RM-AFTERSALESLOG">
         select asi.* from
         after_sales_info asi left join role_priviledge rp on asi.region_id = rp.meta_region_id
         <include refid="AFTERSALES-CONDITION"/>
@@ -31,6 +46,24 @@
         select count(1) from
         after_sales_info asi left join role_priviledge rp on asi.region_id = rp.meta_region_id
         <include refid="AFTERSALES-CONDITION"/>
+    </select>
+
+    <select id="findAfterSaleByCustomerCode" resultMap="RM-AFTERSALESLOG">
+        select asi.* from
+        after_sales_info asi left join role_priviledge rp on asi.region_id = rp.meta_region_id
+        where rp.role_id = #{roleId}
+        <if test="customerCode != '' and customerCode != null">
+            and asi.customer_code = #{customerCode}
+        </if>
+    </select>
+
+    <select id="findAfterSaleCountByEquipmentId" resultType="string">
+        select count(1) from
+        after_sales_info asi left join role_priviledge rp on asi.region_id = rp.meta_region_id
+        where rp.role_id = #{roleId}
+        <if test="equipmentId != '' and equipmentId != null">
+            and asi.equipment_id = #{equipmentId}
+        </if>
     </select>
 
 </mapper>

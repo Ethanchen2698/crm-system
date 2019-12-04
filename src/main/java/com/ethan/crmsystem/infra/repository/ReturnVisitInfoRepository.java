@@ -1,6 +1,6 @@
-package com.ethan.crmsystem.repository;
+package com.ethan.crmsystem.infra.repository;
 
-import com.ethan.crmsystem.domain.ReturnVisitInfo;
+import com.ethan.crmsystem.infra.domain.ReturnVisitInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +12,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ReturnVisitInfoRepository extends JpaRepository<ReturnVisitInfo,Integer> {
+
+    ReturnVisitInfo findByCustomerCode(String code);
+
+    void deleteByCustomerCode(String code);
 }

@@ -29,4 +29,12 @@ public class EquipmentModel {
 
     private String region;
 
+    private String creatTime;
+
+    private String updateTime;
+
+    private String userName;
+
+    private String afterSalesCount;
+
 }

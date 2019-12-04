@@ -2,13 +2,12 @@ package com.ethan.crmsystem.service;
 
 import com.ethan.crmsystem.common.RequestContext;
 import com.ethan.crmsystem.common.ResponseConstants;
-import com.ethan.crmsystem.domain.Customer;
-import com.ethan.crmsystem.domain.MetaRegion;
-import com.ethan.crmsystem.domain.User;
-import com.ethan.crmsystem.mapper.CustomerMapper;
-import com.ethan.crmsystem.mapper.bean.CustomerBean;
-import com.ethan.crmsystem.repository.CustomerRepository;
-import com.ethan.crmsystem.repository.MetaRegionRepository;
+import com.ethan.crmsystem.infra.domain.*;
+import com.ethan.crmsystem.infra.mapper.AfterSalesMapper;
+import com.ethan.crmsystem.infra.mapper.CustomerMapper;
+import com.ethan.crmsystem.infra.mapper.EquipmentMapper;
+import com.ethan.crmsystem.infra.mapper.ReturnVisitMapper;
+import com.ethan.crmsystem.infra.repository.*;
 import com.ethan.crmsystem.utils.LocalDateTimeHelper;
 import com.ethan.crmsystem.web.model.CustomerForm;
 import com.ethan.crmsystem.web.model.CustomerModel;
@@ -41,6 +40,18 @@ public class CustomerService {
 
     private MetaRegionRepository metaRegionRepository;
 
+    private UserRepository userRepository;
+
+    private EquipmentRepository equipmentRepository;
+
+    private AfterSalesInfoRepository afterSalesInfoRepository;
+
+    private ReturnVisitInfoRepository returnVisitInfoRepository;
+
+    private EquipmentMapper equipmentMapper;
+
+    private ReturnVisitMapper returnVisitMapper;
+
     private RequestContext requestContext;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -52,20 +63,30 @@ public class CustomerService {
         User user = requestContext.getRequestUser();
 
         customerForm = dealFormData(customerForm);
-        List<CustomerBean> customerList = customerMapper.findCustomerInfoByCondition(customerForm,user.getRoleId());
+        List<Customer> customerList = customerMapper.findCustomerInfoByCondition(customerForm,user.getRoleId());
 
         List<CustomerModel> customerModels = new ArrayList<>();
         customerList.forEach(customer -> {
             CustomerModel customerModel = new CustomerModel();
-            String creatTime = customer.getCreat_time().format(format);
+            String equipmentCount = equipmentMapper.findEquipmentCountByCode(customer.getCode(),user.getRoleId());
+            if (equipmentCount == null){
+                equipmentCount = "0";
+            }
+            String returnVisitCount = returnVisitMapper.findReturnVisitCountByCode(customer.getCode(),user.getRoleId());
+            if (returnVisitCount == null){
+                returnVisitCount = "0";
+            }
+            String creatTime = customer.getCreatTime().format(format);
 
             customerModel.setId(customer.getId());
             customerModel.setCode(customer.getCode());
             customerModel.setName(customer.getName());
             customerModel.setAddress(customer.getAddress());
             customerModel.setPhonenum(customer.getPhonenum());
-            customerModel.setRegion(customer.getRegion_id());
+            customerModel.setRegion(customer.getRegionId());
             customerModel.setCreatTime(creatTime);
+            customerModel.setEquipmentCount(equipmentCount);
+            customerModel.setReturnVisitCount(returnVisitCount);
 
             customerModels.add(customerModel);
         });
@@ -82,7 +103,7 @@ public class CustomerService {
         return count;
     }
 
-    public String findCustomerByCode(String code) {
+    public String findCustomerCode(String code) {
 
         if (code == null  || "undefined".equals(code)){
             return null;
@@ -110,6 +131,30 @@ public class CustomerService {
     public String updateCustomer(CustomerModel customerModel) {
 
         Customer customer = customerRepository.findById(customerModel.getId()).get();
+        // 如果前端更新customerCode或者地区，则下列三种也要更新
+        if (!StringUtils.equals(customer.getCode(),customerModel.getCode()) || !StringUtils.equals(customer.getRegionId(),customerModel.getRegion())){
+            User user = requestContext.getRequestUser();
+            Equipment equipment = equipmentRepository.findByCustomerCode(customer.getCode());
+            equipment.setCustomerCode(customerModel.getCode());
+            equipment.setRegionId(customerModel.getRegion());
+            equipment.setUserId(user.getId());
+            equipment.setUpdateTime(LocalDateTime.now());
+            equipmentRepository.save(equipment);
+
+            AfterSalesInfo afterSalesInfo = afterSalesInfoRepository.findByCustomerCode(customer.getCode());
+            afterSalesInfo.setCustomerCode(customerModel.getCode());
+            afterSalesInfo.setRegionId(customerModel.getRegion());
+            afterSalesInfo.setUserId(user.getId());
+            afterSalesInfo.setUpdateTime(LocalDateTime.now());
+            afterSalesInfoRepository.save(afterSalesInfo);
+
+            ReturnVisitInfo returnVisitInfo = returnVisitInfoRepository.findByCustomerCode(customer.getCode());
+            returnVisitInfo.setCustomerCode(customerModel.getCode());
+            returnVisitInfo.setRegionId(customerModel.getRegion());
+            returnVisitInfo.setUserId(user.getId());
+            afterSalesInfo.setUpdateTime(LocalDateTime.now());
+            returnVisitInfoRepository.save(returnVisitInfo);
+        }
 
         customer = dealCustomer(customer,customerModel);
         customer.setUpdateTime(LocalDateTime.now());
@@ -126,8 +171,43 @@ public class CustomerService {
             return ResponseConstants.FAILURE;
         }
         customerRepository.deleteByCode(code);
+        equipmentRepository.deleteByCustomerCode(code);
+        afterSalesInfoRepository.deleteByCustomerCode(code);
+        returnVisitInfoRepository.deleteByCustomerCode(code);
 
         return ResponseConstants.SUCCESS;
+    }
+
+    public CustomerModel findCustomerInfoByCode(String code) {
+
+        if (code == null  || "undefined".equals(code)){
+            return null;
+        }
+        Customer customer = customerRepository.findByCode(code);
+
+        if (customer == null){
+            return null;
+        }
+
+        CustomerModel customerModel = new CustomerModel();
+        String creatTime = customer.getCreatTime().format(format);
+        String updateTime = null;
+        if (customer.getUpdateTime() != null){
+            updateTime = customer.getUpdateTime().format(format);
+        }
+        Optional<User> user = userRepository.findById(customer.getUserId());
+
+        customerModel.setId(customer.getId());
+        customerModel.setCode(customer.getCode());
+        customerModel.setName(customer.getName());
+        customerModel.setAddress(customer.getAddress());
+        customerModel.setPhonenum(customer.getPhonenum());
+        customerModel.setRegion(customer.getRegionId());
+        customerModel.setCreatTime(creatTime);
+        customerModel.setUpdateTime(updateTime);
+        customerModel.setUserName(user.get().getFullName());
+
+        return customerModel;
     }
 
     private Customer dealCustomer(Customer customer,CustomerModel customerModel){
@@ -193,5 +273,35 @@ public class CustomerService {
     @Autowired
     public void setRequestContext(RequestContext requestContext) {
         this.requestContext = requestContext;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setEquipmentRepository(EquipmentRepository equipmentRepository) {
+        this.equipmentRepository = equipmentRepository;
+    }
+
+    @Autowired
+    public void setAfterSalesInfoRepository(AfterSalesInfoRepository afterSalesInfoRepository) {
+        this.afterSalesInfoRepository = afterSalesInfoRepository;
+    }
+
+    @Autowired
+    public void setReturnVisitInfoRepository(ReturnVisitInfoRepository returnVisitInfoRepository) {
+        this.returnVisitInfoRepository = returnVisitInfoRepository;
+    }
+
+    @Autowired
+    public void setReturnVisitMapper(ReturnVisitMapper returnVisitMapper) {
+        this.returnVisitMapper = returnVisitMapper;
+    }
+
+    @Autowired
+    public void setEquipmentMapper(EquipmentMapper equipmentMapper) {
+        this.equipmentMapper = equipmentMapper;
     }
 }

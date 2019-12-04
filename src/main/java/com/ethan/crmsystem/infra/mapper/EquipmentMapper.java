@@ -1,6 +1,7 @@
-package com.ethan.crmsystem.mapper;
+package com.ethan.crmsystem.infra.mapper;
 
-import com.ethan.crmsystem.mapper.bean.EquipmentBean;
+import com.ethan.crmsystem.infra.domain.Customer;
+import com.ethan.crmsystem.infra.domain.Equipment;
 import com.ethan.crmsystem.web.model.EquipmentForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,9 +17,13 @@ import java.util.List;
 @Mapper
 public interface EquipmentMapper {
 
-    List<EquipmentBean> findEquipmentByCondition(@Param("equipmentForm") EquipmentForm equipmentForm,
+    List<Equipment> findEquipmentByCondition(@Param("equipmentForm") EquipmentForm equipmentForm,
                                                  @Param("roleId") Integer roelId);
 
     String findCountByCondition(@Param("equipmentForm") EquipmentForm equipmentForm,
                                 @Param("roleId") Integer roelId);
+
+    List<Equipment> findEquipmentInfoByCode(@Param("customerCode") String customerCode, @Param("roleId") Integer roleId);
+
+    String findEquipmentCountByCode(@Param("customerCode")String customerCode, @Param("roleId") Integer roleId);
 }

@@ -2,11 +2,11 @@ package com.ethan.crmsystem.service;
 
 import com.ethan.crmsystem.common.RequestContext;
 import com.ethan.crmsystem.common.ResponseConstants;
-import com.ethan.crmsystem.domain.ReturnVisitInfo;
-import com.ethan.crmsystem.domain.User;
-import com.ethan.crmsystem.mapper.ReturnVisitMapper;
-import com.ethan.crmsystem.mapper.bean.ReturnVisitBean;
-import com.ethan.crmsystem.repository.ReturnVisitInfoRepository;
+import com.ethan.crmsystem.infra.domain.ReturnVisitInfo;
+import com.ethan.crmsystem.infra.domain.User;
+import com.ethan.crmsystem.infra.mapper.ReturnVisitMapper;
+import com.ethan.crmsystem.infra.repository.ReturnVisitInfoRepository;
+import com.ethan.crmsystem.infra.repository.UserRepository;
 import com.ethan.crmsystem.utils.LocalDateTimeHelper;
 import com.ethan.crmsystem.web.model.ReturnVisitForm;
 import com.ethan.crmsystem.web.model.ReturnVisitModel;
@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Description:
@@ -37,6 +38,8 @@ public class ReturnVisitService {
 
     private RequestContext requestContext;
 
+    private UserRepository userRepository;
+
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public List<ReturnVisitModel> findEquipmentTable(ReturnVisitForm returnVisitForm) {
@@ -44,18 +47,18 @@ public class ReturnVisitService {
         User user = requestContext.getRequestUser();
         returnVisitForm = dealFormData(returnVisitForm);
 
-        List<ReturnVisitBean> returnVisitBeans = returnVisitMapper.findReturnVisitLogByCondition(returnVisitForm,user.getRoleId());
+        List<ReturnVisitInfo> returnVisitBeans = returnVisitMapper.findReturnVisitLogByCondition(returnVisitForm,user.getRoleId());
 
         List<ReturnVisitModel> returnVisitModels = new ArrayList<>();
         returnVisitBeans.forEach(returnVisitBean -> {
             ReturnVisitModel returnVisitModel = new ReturnVisitModel();
-            String visitTime = returnVisitBean.getVisit_time().format(formatter);
+            String visitTime = returnVisitBean.getVisitTime().format(formatter);
 
             returnVisitModel.setId(returnVisitBean.getId());
-            returnVisitModel.setCustomerCode(returnVisitBean.getCustomer_code());
-            returnVisitModel.setVisitStaff(returnVisitBean.getVisit_staff());
+            returnVisitModel.setCustomerCode(returnVisitBean.getCustomerCode());
+            returnVisitModel.setVisitStaff(returnVisitBean.getVisitStaff());
             returnVisitModel.setVisitTime(visitTime);
-            returnVisitModel.setVisitRecord(returnVisitBean.getVisit_record());
+            returnVisitModel.setVisitRecord(returnVisitBean.getVisitRecord());
             returnVisitModel.setNote(returnVisitBean.getNote());
 
             returnVisitModels.add(returnVisitModel);
@@ -109,6 +112,45 @@ public class ReturnVisitService {
         return ResponseConstants.SUCCESS;
     }
 
+    public List<ReturnVisitModel> findReturnVisitByCustomerCode(String customerCode) {
+
+        if (customerCode == null  || "undefined".equals(customerCode)){
+            return null;
+        }
+        User user = requestContext.getRequestUser();
+        List<ReturnVisitInfo> returnVisitBeans = returnVisitMapper.findReturnVisitByCustomerCode(customerCode,user.getRoleId());
+        if (returnVisitBeans == null){
+            return null;
+        }
+
+        List<ReturnVisitModel> returnVisitModels = new ArrayList<>();
+        returnVisitBeans.forEach(returnVisitBean -> {
+            ReturnVisitModel returnVisitModel = new ReturnVisitModel();
+
+            String creatTime = returnVisitBean.getCreatTime().format(formatter);
+            String updateTime = null;
+            if (returnVisitBean.getUpdateTime() != null){
+                updateTime = returnVisitBean.getUpdateTime().format(formatter);
+            }
+            Optional<User> optionalUser = userRepository.findById(returnVisitBean.getUserId());
+            String visitTime = returnVisitBean.getVisitTime().format(formatter);
+
+            returnVisitModel.setId(returnVisitBean.getId());
+            returnVisitModel.setCustomerCode(returnVisitBean.getCustomerCode());
+            returnVisitModel.setVisitStaff(returnVisitBean.getVisitStaff());
+            returnVisitModel.setVisitTime(visitTime);
+            returnVisitModel.setVisitRecord(returnVisitBean.getVisitRecord());
+            returnVisitModel.setNote(returnVisitBean.getNote());
+            returnVisitModel.setCreatTime(creatTime);
+            returnVisitModel.setUpdateTime(updateTime);
+            returnVisitModel.setUserName(optionalUser.get().getFullName());
+
+            returnVisitModels.add(returnVisitModel);
+        });
+
+        return returnVisitModels;
+    }
+
     private ReturnVisitInfo dealReturnVisitLog(ReturnVisitInfo returnVisitInfo, ReturnVisitModel returnVisitModel){
 
         User user = requestContext.getRequestUser();
@@ -152,5 +194,10 @@ public class ReturnVisitService {
     @Autowired
     public void setRequestContext(RequestContext requestContext) {
         this.requestContext = requestContext;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

@@ -1,10 +1,8 @@
 package com.ethan.crmsystem.service;
 
-import com.ethan.crmsystem.common.RequestContext;
 import com.ethan.crmsystem.common.ResponseConstants;
-import com.ethan.crmsystem.domain.MetaRegion;
-import com.ethan.crmsystem.exception.AuthenticationException;
-import com.ethan.crmsystem.repository.MetaRegionRepository;
+import com.ethan.crmsystem.infra.domain.MetaRegion;
+import com.ethan.crmsystem.infra.repository.MetaRegionRepository;
 import com.ethan.crmsystem.web.model.MetaRegionModel;
 import com.ethan.crmsystem.web.model.NesTableModel;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

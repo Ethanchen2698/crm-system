@@ -1,6 +1,6 @@
-package com.ethan.crmsystem.repository;
+package com.ethan.crmsystem.infra.repository;
 
-import com.ethan.crmsystem.domain.AfterSalesInfo;
+import com.ethan.crmsystem.infra.domain.AfterSalesInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +12,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AfterSalesInfoRepository extends JpaRepository<AfterSalesInfo,Integer> {
+
+    AfterSalesInfo findByCustomerCode(String code);
+
+    void deleteByCustomerCode(String code);
+
+    void deleteByEquipmentId(String id);
 }

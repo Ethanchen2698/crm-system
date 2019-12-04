@@ -1,6 +1,6 @@
-package com.ethan.crmsystem.mapper;
+package com.ethan.crmsystem.infra.mapper;
 
-import com.ethan.crmsystem.mapper.bean.CustomerBean;
+import com.ethan.crmsystem.infra.domain.Customer;
 import com.ethan.crmsystem.web.model.CustomerForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,8 +16,8 @@ import java.util.List;
 @Mapper
 public interface CustomerMapper {
 
-    List<CustomerBean> findCustomerInfoByCondition(@Param("customerForm")CustomerForm customerForm,
-                                                   @Param("roleId") Integer roleId);
+    List<Customer> findCustomerInfoByCondition(@Param("customerForm")CustomerForm customerForm,
+                                               @Param("roleId") Integer roleId);
 
     String findCountByCondition(@Param("customerForm")CustomerForm customerForm,
                                 @Param("roleId") Integer roleId);

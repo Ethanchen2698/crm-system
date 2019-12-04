@@ -31,9 +31,9 @@ public class CustomerController {
         return customerService.countCustomer(customerForm);
     }
 
-    @GetMapping("/findCustomerByCode/{code}")
-    public String findCustomerByCode(@PathVariable String code){
-        return customerService.findCustomerByCode(code);
+    @GetMapping("/findCustomerCode/{code}")
+    public String findCustomerCode(@PathVariable String code){
+        return customerService.findCustomerCode(code);
     }
 
     @PostMapping("/addCustomer")
@@ -49,6 +49,11 @@ public class CustomerController {
     @DeleteMapping("/deleteCustomer/{code}")
     public String deleteCustomer(@PathVariable String code){
         return customerService.deleteCustomer(code);
+    }
+
+    @GetMapping("/findCustomerInfoByCode/{code}")
+    public CustomerModel findCustomerInfoByCode(@PathVariable String code){
+        return customerService.findCustomerInfoByCode(code);
     }
 
     @Autowired

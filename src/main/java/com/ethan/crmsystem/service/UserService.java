@@ -2,9 +2,9 @@ package com.ethan.crmsystem.service;
 
 import com.ethan.crmsystem.common.ResponseConstants;
 import com.ethan.crmsystem.common.StringGenerator;
-import com.ethan.crmsystem.domain.User;
-import com.ethan.crmsystem.mapper.UserModelMapper;
-import com.ethan.crmsystem.repository.UserRepository;
+import com.ethan.crmsystem.infra.domain.User;
+import com.ethan.crmsystem.infra.mapper.UserModelMapper;
+import com.ethan.crmsystem.infra.repository.UserRepository;
 import com.ethan.crmsystem.web.model.UserInfoModel;
 import com.ethan.crmsystem.web.model.UserModel;
 import com.ethan.crmsystem.web.model.UserTableModel;

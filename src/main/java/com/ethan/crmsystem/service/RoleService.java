@@ -1,12 +1,11 @@
 package com.ethan.crmsystem.service;
 
 import com.ethan.crmsystem.common.ResponseConstants;
-import com.ethan.crmsystem.domain.*;
-import com.ethan.crmsystem.repository.*;
+import com.ethan.crmsystem.infra.domain.*;
+import com.ethan.crmsystem.infra.repository.*;
 import com.ethan.crmsystem.web.model.RoleModel;
 import com.ethan.crmsystem.web.model.RoleTableModel;
 import com.ethan.crmsystem.web.model.SelectGroupOption;
-import com.ethan.crmsystem.web.model.SelectOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

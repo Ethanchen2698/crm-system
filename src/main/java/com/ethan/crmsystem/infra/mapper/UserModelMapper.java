@@ -1,4 +1,4 @@
-package com.ethan.crmsystem.mapper;
+package com.ethan.crmsystem.infra.mapper;
 
 import com.ethan.crmsystem.web.model.UserInfoModel;
 import com.ethan.crmsystem.web.model.UserTableModel;

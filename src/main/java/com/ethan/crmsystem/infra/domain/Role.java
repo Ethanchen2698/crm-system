@@ -1,4 +1,4 @@
-package com.ethan.crmsystem.domain;
+package com.ethan.crmsystem.infra.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.NotFound;

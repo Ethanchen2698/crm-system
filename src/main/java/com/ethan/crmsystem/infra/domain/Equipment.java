@@ -1,11 +1,8 @@
-package com.ethan.crmsystem.domain;
+package com.ethan.crmsystem.infra.domain;
 
-import com.ethan.crmsystem.common.UUIDGenerator;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -19,12 +16,8 @@ import java.time.LocalDateTime;
 @Entity
 public class Equipment {
 
-    public Equipment(){this.id = UUIDGenerator.random();}
-
-    /**
-     * UUID
-     */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String customerCode;

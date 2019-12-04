@@ -1,6 +1,6 @@
 package com.ethan.crmsystem.web;
 
-import com.ethan.crmsystem.domain.MetaRegion;
+import com.ethan.crmsystem.infra.domain.MetaRegion;
 import com.ethan.crmsystem.service.MetaService;
 import com.ethan.crmsystem.web.model.MetaRegionModel;
 import com.ethan.crmsystem.web.model.NesTableModel;

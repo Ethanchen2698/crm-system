@@ -46,6 +46,11 @@ public class EquipmentController {
         return equipmentService.deleteEquipment(id);
     }
 
+    @GetMapping("/findEquipmentInfoByCode/{customerCode}")
+    public List<EquipmentModel> findEquipmentInfoByCode(@PathVariable String customerCode){
+        return equipmentService.findEquipmentInfoByCode(customerCode);
+    }
+
     @Autowired
     public void setEquipmentService(EquipmentService equipmentService) {
         this.equipmentService = equipmentService;

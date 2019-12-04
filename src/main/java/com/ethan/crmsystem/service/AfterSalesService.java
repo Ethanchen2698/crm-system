@@ -2,11 +2,11 @@ package com.ethan.crmsystem.service;
 
 import com.ethan.crmsystem.common.RequestContext;
 import com.ethan.crmsystem.common.ResponseConstants;
-import com.ethan.crmsystem.domain.AfterSalesInfo;
-import com.ethan.crmsystem.domain.User;
-import com.ethan.crmsystem.mapper.AfterSalesMapper;
-import com.ethan.crmsystem.mapper.bean.AfterSalesBean;
-import com.ethan.crmsystem.repository.AfterSalesInfoRepository;
+import com.ethan.crmsystem.infra.domain.AfterSalesInfo;
+import com.ethan.crmsystem.infra.domain.User;
+import com.ethan.crmsystem.infra.mapper.AfterSalesMapper;
+import com.ethan.crmsystem.infra.repository.AfterSalesInfoRepository;
+import com.ethan.crmsystem.infra.repository.UserRepository;
 import com.ethan.crmsystem.utils.LocalDateTimeHelper;
 import com.ethan.crmsystem.web.model.AfterSalesForm;
 import com.ethan.crmsystem.web.model.AfterSalesModel;
@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Description:
@@ -37,6 +38,8 @@ public class AfterSalesService {
 
     private RequestContext requestContext;
 
+    private UserRepository userRepository;
+
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public List<AfterSalesModel> findEquipmentTable(AfterSalesForm afterSalesForm) {
@@ -44,19 +47,19 @@ public class AfterSalesService {
         User user = requestContext.getRequestUser();
         afterSalesForm = dealFormData(afterSalesForm);
 
-        List<AfterSalesBean> afterSalesBeans = afterSalesMapper.findAfterSalesLogByCondition(afterSalesForm,user.getRoleId());
+        List<AfterSalesInfo> afterSalesBeans = afterSalesMapper.findAfterSalesLogByCondition(afterSalesForm,user.getRoleId());
 
         List<AfterSalesModel> afterSalesModels = new ArrayList<>();
         afterSalesBeans.forEach(afterSalesBean -> {
             AfterSalesModel afterSalesModel = new AfterSalesModel();
-            String dealTime = afterSalesBean.getDeal_time().format(formatter);
+            String dealTime = afterSalesBean.getDealTime().format(formatter);
 
             afterSalesModel.setId(afterSalesBean.getId());
-            afterSalesModel.setCustomerCode(afterSalesBean.getCustomer_code());
-            afterSalesModel.setEquipmentId(afterSalesBean.getEquipment_id());
-            afterSalesModel.setDealStaff(afterSalesBean.getDeal_staff());
+            afterSalesModel.setCustomerCode(afterSalesBean.getCustomerCode());
+            afterSalesModel.setEquipmentId(afterSalesBean.getEquipmentId());
+            afterSalesModel.setDealStaff(afterSalesBean.getDealStaff());
             afterSalesModel.setDealTime(dealTime);
-            afterSalesModel.setSaleRecord(afterSalesBean.getSale_record());
+            afterSalesModel.setSaleRecord(afterSalesBean.getSaleRecord());
             afterSalesModel.setNote(afterSalesBean.getNote());
 
             afterSalesModels.add(afterSalesModel);
@@ -112,6 +115,47 @@ public class AfterSalesService {
         return ResponseConstants.SUCCESS;
     }
 
+    public List<AfterSalesModel> findAfterSaleByCustomerCode(String customerCode) {
+
+        if (customerCode == null  || "undefined".equals(customerCode)){
+            return null;
+        }
+        User user = requestContext.getRequestUser();
+        List<AfterSalesInfo> afterSalesBeans = afterSalesMapper.findAfterSaleByCustomerCode(customerCode,user.getRoleId());
+        if (afterSalesBeans == null){
+            return null;
+        }
+
+        List<AfterSalesModel> afterSalesModels = new ArrayList<>();
+        afterSalesBeans.forEach(afterSalesBean -> {
+
+            AfterSalesModel afterSalesModel = new AfterSalesModel();
+
+            String creatTime = afterSalesBean.getCreatTime().format(formatter);
+            String updateTime = null;
+            if (afterSalesBean.getUpdateTime() != null){
+                updateTime = afterSalesBean.getUpdateTime().format(formatter);
+            }
+            Optional<User> optionalUser = userRepository.findById(afterSalesBean.getUserId());
+            String dealTime = afterSalesBean.getDealTime().format(formatter);
+
+            afterSalesModel.setId(afterSalesBean.getId());
+            afterSalesModel.setCustomerCode(afterSalesBean.getCustomerCode());
+            afterSalesModel.setEquipmentId(afterSalesBean.getEquipmentId());
+            afterSalesModel.setDealStaff(afterSalesBean.getDealStaff());
+            afterSalesModel.setDealTime(dealTime);
+            afterSalesModel.setSaleRecord(afterSalesBean.getSaleRecord());
+            afterSalesModel.setNote(afterSalesBean.getNote());
+            afterSalesModel.setCreatTime(creatTime);
+            afterSalesModel.setUpdateTime(updateTime);
+            afterSalesModel.setUserName(optionalUser.get().getFullName());
+
+            afterSalesModels.add(afterSalesModel);
+        });
+
+        return afterSalesModels;
+    }
+
     private AfterSalesInfo dealAfterSalesLog(AfterSalesInfo afterSalesInfo, AfterSalesModel afterSalesModel){
 
         User user = requestContext.getRequestUser();
@@ -155,5 +199,10 @@ public class AfterSalesService {
     @Autowired
     public void setAfterSalesInfoRepository(AfterSalesInfoRepository afterSalesInfoRepository) {
         this.afterSalesInfoRepository = afterSalesInfoRepository;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

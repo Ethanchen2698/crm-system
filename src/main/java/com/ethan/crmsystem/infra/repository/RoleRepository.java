@@ -1,6 +1,6 @@
-package com.ethan.crmsystem.repository;
+package com.ethan.crmsystem.infra.repository;
 
-import com.ethan.crmsystem.domain.Role;
+import com.ethan.crmsystem.infra.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

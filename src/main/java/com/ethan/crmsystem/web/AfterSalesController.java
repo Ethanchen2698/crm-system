@@ -46,6 +46,11 @@ public class AfterSalesController {
         return afterSalesService.deleteAfterSalesLog(id);
     }
 
+    @GetMapping("/findAfterSaleByCustomerCode/{customerCode}")
+    public List<AfterSalesModel> findAfterSaleByCustomerCode(@PathVariable String customerCode){
+        return afterSalesService.findAfterSaleByCustomerCode(customerCode);
+    }
+
     @Autowired
     public void setAfterSalesService(AfterSalesService afterSalesService) {
         this.afterSalesService = afterSalesService;

@@ -1,10 +1,8 @@
-package com.ethan.crmsystem.repository;
+package com.ethan.crmsystem.infra.repository;
 
-import com.ethan.crmsystem.domain.Customer;
+import com.ethan.crmsystem.infra.domain.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 /**
  * Description:

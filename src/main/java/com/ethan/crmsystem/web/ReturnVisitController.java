@@ -46,6 +46,11 @@ public class ReturnVisitController {
         return returnVisitService.deleteReturnVisitLog(id);
     }
 
+    @GetMapping("/findReturnVisitByCustomerCode/{customerCode}")
+    public List<ReturnVisitModel> findReturnVisitByCustomerCode(@PathVariable String customerCode){
+        return returnVisitService.findReturnVisitByCustomerCode(customerCode);
+    }
+
     @Autowired
     public void setReturnVisitService(ReturnVisitService returnVisitService) {
         this.returnVisitService = returnVisitService;

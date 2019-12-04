@@ -33,4 +33,12 @@ public class CustomerModel {
      * 创建客户的时间
      */
     private String creatTime;
+
+    private String updateTime;
+
+    private String userName;
+
+    private String equipmentCount;
+
+    private String returnVisitCount;
 }

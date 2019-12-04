@@ -1,4 +1,4 @@
-package com.ethan.crmsystem.domain;
+package com.ethan.crmsystem.infra.domain;
 
 import lombok.Data;
 
@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 /**
  * Description:
  *
- * @version : ReturnVisitInfo.java,2019/11/10 17:20 $
+ * @version : AfterSalesInfo.java,2019/11/10 17:16 $
  * @author<a href="ethanchen2698@163.com">ethan chen</a>
  */
 @Data
 @Table
 @Entity
-public class ReturnVisitInfo {
+public class AfterSalesInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +22,13 @@ public class ReturnVisitInfo {
 
     private String customerCode;
 
-    private LocalDateTime visitTime;
+    private String equipmentId;
 
-    private String visitStaff;
+    private String dealStaff;
 
-    private String visitRecord;
+    private LocalDateTime dealTime;
+
+    private String saleRecord;
 
     private String note;
 

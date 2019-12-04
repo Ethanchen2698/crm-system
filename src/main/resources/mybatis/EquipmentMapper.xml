@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ethan.crmsystem.mapper.EquipmentMapper">
+<mapper namespace="com.ethan.crmsystem.infra.mapper.EquipmentMapper">
+
+    <resultMap id="RM-EQUIPMENT" type="com.ethan.crmsystem.infra.domain.Equipment">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="customer_code" jdbcType="VARCHAR" property="customerCode"></result>
+        <result column="device_name" jdbcType="VARCHAR" property="deviceName"></result>
+        <result column="installation_address" jdbcType="VARCHAR" property="installationAddress"></result>
+        <result column="installation_time" jdbcType="DATE" property="installationTime"></result>
+        <result column="price" jdbcType="VARCHAR" property="price"></result>
+        <result column="sales_staff" jdbcType="VARCHAR" property="salesStaff"></result>
+        <result column="installation_staff" jdbcType="VARCHAR" property="installationStaff"></result>
+        <result column="region_id" jdbcType="CHAR" property="regionId"></result>
+        <result column="update_time" jdbcType="DATE" property="updateTime"></result>
+        <result column="user_id" jdbcType="CHAR" property="userId"></result>
+        <result column="creat_time" jdbcType="DATE" property="creatTime"></result>
+    </resultMap>
     
     <sql id="EUQIPMENT-CONDITION">
         <where>
@@ -26,7 +41,7 @@
         </where>
     </sql>
 
-    <select id="findEquipmentByCondition" resultType="com.ethan.crmsystem.mapper.bean.EquipmentBean">
+    <select id="findEquipmentByCondition" resultMap="RM-EQUIPMENT">
         select e.* from
         equipment e left join role_priviledge rp on e.region_id = rp.meta_region_id
         <include refid="EUQIPMENT-CONDITION"/>
@@ -37,6 +52,24 @@
         select count(1) from
         equipment e left join role_priviledge rp on e.region_id = rp.meta_region_id
         <include refid="EUQIPMENT-CONDITION"/>
+    </select>
+
+    <select id="findEquipmentInfoByCode" resultMap="RM-EQUIPMENT">
+        select e.* from
+        equipment e left join role_priviledge rp on e.region_id = rp.meta_region_id
+        where rp.role_id = #{roleId}
+        <if test="customerCode != '' and customerCode != null">
+            and e.customer_code = #{customerCode}
+        </if>
+    </select>
+
+    <select id="findEquipmentCountByCode" resultType="string">
+        select count(1) from
+        equipment e left join role_priviledge rp on e.region_id = rp.meta_region_id
+        where rp.role_id = #{roleId}
+        <if test="customerCode != '' and customerCode != null">
+            and e.customer_code = #{customerCode}
+        </if>
     </select>
 
 </mapper>

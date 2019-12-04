@@ -1,8 +1,8 @@
 package com.ethan.crmsystem.common;
 
-import com.ethan.crmsystem.domain.User;
+import com.ethan.crmsystem.infra.domain.User;
 import com.ethan.crmsystem.exception.AuthenticationException;
-import com.ethan.crmsystem.repository.UserRepository;
+import com.ethan.crmsystem.infra.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;

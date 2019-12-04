@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ethan.crmsystem.mapper.ReturnVisitMapper">
+<mapper namespace="com.ethan.crmsystem.infra.mapper.ReturnVisitMapper">
+
+    <resultMap id="RM-RETURNVISIT" type="com.ethan.crmsystem.infra.domain.ReturnVisitInfo">
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="customer_code" jdbcType="VARCHAR" property="customerCode"></result>
+        <result column="visit_time" jdbcType="DATE" property="visitTime"></result>
+        <result column="visit_staff" jdbcType="VARCHAR" property="visitStaff"></result>
+        <result column="visit_record" jdbcType="VARCHAR" property="visitRecord"></result>
+        <result column="note" jdbcType="VARCHAR" property="note"></result>
+        <result column="region_id" jdbcType="CHAR" property="regionId"></result>
+        <result column="update_time" jdbcType="DATE" property="updateTime"></result>
+        <result column="user_id" jdbcType="CHAR" property="userId"></result>
+        <result column="creat_time" jdbcType="DATE" property="creatTime"></result>
+    </resultMap>
     
     <sql id="RETURNVISIT-CONDITION">
         <where>
@@ -17,7 +30,7 @@
         </where>
     </sql>
 
-    <select id="findReturnVisitLogByCondition" resultType="com.ethan.crmsystem.mapper.bean.ReturnVisitBean">
+    <select id="findReturnVisitLogByCondition" resultMap="RM-RETURNVISIT">
         select rvi.* from
         return_visit_info rvi left join role_priviledge rp on rvi.region_id = rp.meta_region_id
         <include refid="RETURNVISIT-CONDITION"/>
@@ -28,6 +41,24 @@
         select count(1) from
         return_visit_info rvi left join role_priviledge rp on rvi.region_id = rp.meta_region_id
         <include refid="RETURNVISIT-CONDITION"/>
+    </select>
+
+    <select id="findReturnVisitByCustomerCode" resultMap="RM-RETURNVISIT">
+        select rvi.* from
+        return_visit_info rvi left join role_priviledge rp on rvi.region_id = rp.meta_region_id
+        where rp.role_id = #{roleId}
+        <if test="customerCode != '' and customerCode != null">
+            and rvi.customer_code = #{customerCode}
+        </if>
+    </select>
+
+    <select id="findReturnVisitCountByCode" resultType="string">
+        select count(1) from
+        return_visit_info rvi left join role_priviledge rp on rvi.region_id = rp.meta_region_id
+        where rp.role_id = #{roleId}
+        <if test="customerCode != '' and customerCode != null">
+            and rvi.customer_code = #{customerCode}
+        </if>
     </select>
 
 </mapper>

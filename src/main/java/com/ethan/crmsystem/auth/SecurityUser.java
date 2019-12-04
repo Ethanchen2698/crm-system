@@ -4,7 +4,7 @@
  */
 package com.ethan.crmsystem.auth;
 
-import com.ethan.crmsystem.domain.User;
+import com.ethan.crmsystem.infra.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
