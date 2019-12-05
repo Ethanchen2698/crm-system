@@ -54,4 +54,32 @@
         <include refid="CUSTOMER-CONDITION"/>
     </select>
 
+<!--    <select id="findStatisticsData" resultType="com.ethan.crmsystem.web.model.StatisticsModel">-->
+<!--        select count(1) customerCnt,m.id region,m.name name,m.level level from-->
+<!--        customer c left join role_priviledge rp on c.region_id = rp.meta_region_id-->
+<!--        <if test="statisticsForm.viewLevel == 1">-->
+<!--            left join meta_region mr on c.region_id = mr.id-->
+<!--            left join meta_region m on mr.parent = m.id-->
+<!--            where rp.role_id = #{roleId} and m.parent = #{statisticsForm.region}-->
+<!--            group by m.id-->
+<!--        </if>-->
+<!--        <if test="statisticsForm.viewLevel == 2">-->
+<!--            left join meta_region m on c.region_id = m.id-->
+<!--            where rp.role_id = #{roleId} and m.parent = #{statisticsForm.region}-->
+<!--            group by m.id-->
+<!--        </if>-->
+<!--    </select>-->
+
+    <select id="findStatisticsData" resultType="string">
+        select count(1)  from customer c
+        <if test="level == 1">
+            left join meta_region m on c.region_id = m.id
+            where m.parent = #{value}
+        </if>
+        <if test="level == 2">
+            left join meta_region m on c.region_id = m.id
+            where m.id = #{value}
+        </if>
+    </select>
+
 </mapper>

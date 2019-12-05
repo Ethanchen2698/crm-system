@@ -3,6 +3,8 @@ package com.ethan.crmsystem.infra.mapper;
 import com.ethan.crmsystem.infra.domain.Customer;
 import com.ethan.crmsystem.infra.domain.Equipment;
 import com.ethan.crmsystem.web.model.EquipmentForm;
+import com.ethan.crmsystem.web.model.StatisticsForm;
+import com.ethan.crmsystem.web.model.StatisticsModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,4 +28,8 @@ public interface EquipmentMapper {
     List<Equipment> findEquipmentInfoByCode(@Param("customerCode") String customerCode, @Param("roleId") Integer roleId);
 
     String findEquipmentCountByCode(@Param("customerCode")String customerCode, @Param("roleId") Integer roleId);
+
+//    List<StatisticsModel> findStatisticsData(@Param("statisticsForm") StatisticsForm statisticsForm,@Param("roleId") Integer roleId);
+
+    String findStatisticsData(@Param("value") String value,@Param("level") String level);
 }

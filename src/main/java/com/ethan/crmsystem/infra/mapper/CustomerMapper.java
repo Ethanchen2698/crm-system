@@ -2,6 +2,8 @@ package com.ethan.crmsystem.infra.mapper;
 
 import com.ethan.crmsystem.infra.domain.Customer;
 import com.ethan.crmsystem.web.model.CustomerForm;
+import com.ethan.crmsystem.web.model.StatisticsForm;
+import com.ethan.crmsystem.web.model.StatisticsModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,4 +23,8 @@ public interface CustomerMapper {
 
     String findCountByCondition(@Param("customerForm")CustomerForm customerForm,
                                 @Param("roleId") Integer roleId);
+
+//    List<StatisticsModel> findStatisticsData(@Param("statisticsForm") StatisticsForm statisticsForm,@Param("roleId") Integer roleId);
+
+    String findStatisticsData(@Param("value") String value,@Param("level") String level);
 }
