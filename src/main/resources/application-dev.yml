@@ -3,13 +3,20 @@ jwt:
   prefix: crm-system
 server:
   port: 7004
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 2000        #最大并发数
+    max-connections: 6000   #接受和处理的最大连接数
+    min-SpareThreads: 600     #初始化时创建的线程数
+    acceptCount: 500        #可以放到处理队列中的请求数
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/crm-system?useSSL=false&&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
     username: root
-    password: software026
+    password: Software6608@
+#    password: software026
   jpa:
     show-sql: true
     open-in-view: true
